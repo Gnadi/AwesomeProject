@@ -1,0 +1,62 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "htl.at.awesomeproject"
+        minSdkVersion 23
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "SERVER_HOST", "\"" + getLocalIPv4()[0] + "\""
+
+        }
+        debug {
+            buildConfigField "String", "SERVER_HOST", "\"" + getLocalIPv4()[0] + "\""
+        }
+    }
+}
+
+def static getLocalIPv4() {
+    def ip4s = []
+    NetworkInterface.getNetworkInterfaces()
+            .findAll { it.isUp() && !it.isLoopback() && !it.isVirtual() }
+            .each {
+        it.getInetAddresses()
+                .findAll { !it.isLoopbackAddress() && it instanceof Inet4Address }
+                .each { ip4s << it.toString().substring(1) }
+    }
+    return ip4s
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:cardview-v7:25.1.0'
+    compile 'com.google.firebase:firebase-messaging:10.0.1'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.afollestad.material-dialogs:core:0.9.2.3'
+    compile 'com.afollestad.material-dialogs:commons:0.9.2.3'
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.google.firebase:firebase-auth:10.0.1'
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
+    compile 'com.google.firebase:firebase-crash:10.0.1'
+    compile 'com.google.firebase:firebase-ads:10.0.1'
+    testCompile 'junit:junit:4.12'
+}
+
+
+
+apply plugin: 'com.google.gms.google-services'
